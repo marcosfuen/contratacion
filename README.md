@@ -112,7 +112,7 @@ python manage.py crontab remove
 
 _Agrega notas adicionales sobre como hacer deploy_
 
-## Construido con 🛠�?
+## Construido con 🛠️
 
 _Herramientas que se utilizarón para crear el proyecto_
 
