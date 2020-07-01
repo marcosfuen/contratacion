@@ -1,0 +1,323 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>        
+        <!-- META SECTION -->
+        <title>Contratación | Universidad de Camagüey</title>            
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+        <!-- END META SECTION -->
+        
+        <!-- CSS INCLUDE -->   
+        {% block css %}     
+            <link rel="stylesheet" type="text/css" id="theme" href="{% static 'css/theme-default.css' %}" />
+            <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome-animation.min.css' %}" />
+        {% endblock %}
+        <!-- EOF CSS INCLUDE -->                                      
+    </head>
+    <body>
+        <!-- START PAGE CONTAINER -->
+        <div class="page-container page-navigation-top">            
+            <!-- PAGE CONTENT -->
+            <div class="page-content">
+                
+                <!-- START X-NAVIGATION VERTICAL -->
+                <ul class="x-navigation x-navigation-horizontal">
+                    <li class="xn-logo">
+                        <a href="/accounts/profile/">Contratación</a>
+                        <a href="#" class="x-navigation-control"></a>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-gavel"></span> <span class="xn-text">Contratos de la Universidad de Camagüey</span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="/accounts/profile/currentContract"><span class="fa fa-legal"></span> Contratos de Empresas</a></li>
+                            <li><a href="/accounts/profile/privateContract"><span class="fa fa-legal"></span> Contratos de Cuenta Propia</a></li>
+                            <li><a href="/accounts/profile/expireContract/"><span class="fa fa-legal"></span> Contratos a vencer</a></li>
+                        </ul>
+                    </li>      
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-search"></span> <span class="xn-text"> Buscar Contrato</span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="/accounts/profile/filterContract/"><span class="fa fa-filter"></span> Filtrar por Año y Tipo</a></li>
+                        </ul>
+                    </li>      
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">Administración Contratación</span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'admin:contratacionApp_currentcontract_changelist' %}"><span class="fa fa-legal"></span> Contratos de Empresas</a></li>
+                            <li><a href="{% url 'admin:contratacionApp_privatecontract_changelist' %}"><span class="fa fa-legal"></span> Contratos de Cuenta Propia</a></li>
+                        </ul>
+                    </li>
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-wrench"></span> <span class="xn-text">Administración </span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog"></span>Administración General</a></li>
+                            <li class="xn-openable">
+                                <a href="#"><span class="fa fa-envelope"></span> Usuarios y Grupos</a>
+                                <ul class="animated zoomIn">
+                                    <li><a href="{% url 'admin:auth_user_changelist' %}"><span class="fa fa-user"></span> Usuarios</a></li>
+                                    <li><a href="{% url 'admin:auth_group_changelist' %}"><span class="fa fa-group"></span> Grupo</a></li>
+                                </ul>
+                            </li>
+                        </ul>    
+                    </li>          
+                    {% else %}
+                    <li class="xn-openable">
+                            <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">Contratos de la Universidad de Camagüey</span></a>
+                            <ul class="animated zoomIn">
+                                <li><a href="/accounts/profile/currentContract"><span class="fa fa-legal"></span> Contratos de Empresas</a></li>
+                                <li><a href="/accounts/profile/privateContract"><span class="fa fa-legal"></span> Contratos de Cuenta Propia</a></li>
+                            </ul>
+                        </li>        
+                    {% endif %}
+                    <!-- SIGN OUT -->
+                    <li class="xn-icon-button pull-right">
+                        <a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>                        
+                    </li> 
+                    <!-- END SIGN OUT -->                                        
+                </ul>
+                <!-- END X-NAVIGATION VERTICAL -->                     
+                
+                <!-- START BREADCRUMB -->
+                <!-- <ul class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Layouts</a></li>
+                    <li class="active">Navigation Top</li> 
+                </ul> -->
+                <!-- END BREADCRUMB -->                
+                
+                <div class="page-title">                    
+                    <h2><span></span></h2>
+                </div>                   
+                
+                <!-- PAGE CONTENT WRAPPER -->
+                <div class="page-content-wrap">                
+                    
+                    <!-- START WIDGETS -->                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            
+                            <!-- START WIDGET SLIDER -->
+                            <div class="widget widget-default widget-carousel">
+                                <div class="owl-carousel" id="owl-example">
+                                    <div>                                    
+                                        <div class="widget-title">Total de Contratos</div>                                                                        
+                                        <div class="widget-subtitle">Empresas</div>
+                                        <div class="widget-int">{{ countCurrentContract }}</div>
+                                    </div>
+                                    <div>                                    
+                                        <div class="widget-title">Total de Contratos</div>
+                                        <div class="widget-subtitle">Cuenta Propia</div>
+                                        <div class="widget-int">{{ countPrivateContract }}</div>
+                                    </div>
+                                    <div>                                    
+                                        <div class="widget-title">Nuevos por Empresas</div>
+                                        <div class="widget-subtitle">en el dia</div>
+                                        <div class="widget-int">{{ newCurrentContract }}</div>
+                                    </div>
+                                    <div>                                    
+                                        <div class="widget-title">Nuevos por Cuenta Propia</div>
+                                        <div class="widget-subtitle">en el dia</div>
+                                        <div class="widget-int">{{ newPrivateContract }}</div>
+                                    </div>
+                                </div>                            
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>                             
+                            </div>         
+                            <!-- END WIDGET SLIDER -->
+                            
+                        </div>
+                        <div class="col-md-3">
+                            
+                            <!-- START WIDGET MESSAGES -->
+                            {% if allOldContract %}
+                            <div class="widget widget-default widget-item-icon" onclick="location.href='/accounts/profile/expireContract/';">
+                                <div class="widget-item-left">
+                                    <span class="fa fa-bell faa-ring animated"></span>
+                                </div>                             
+                                <div class="widget-data">
+                                    <div class="widget-int num-count">{{ allOldContract }}</div>
+                                    <div class="widget-title">Contratos a vencer</div>
+                                    <div class="widget-subtitle">Nuevas Notificaciones</div>
+                                </div>      
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>
+                            </div>               
+                            {% else %}
+                            <div class="widget widget-default widget-item-icon" onclick="location.href='/accounts/profile/expireContract/';">
+                                <div class="widget-item-left">
+                                    <span class="fa fa-bell"></span>
+                                </div>                             
+                                <div class="widget-data">
+                                    <div class="widget-int num-count">{{ allOldContract }}</div>
+                                    <div class="widget-title">Contratos a vencer</div>
+                                    <div class="widget-subtitle">Nuevas Notificaciones</div>
+                                </div>      
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>
+                            </div>          
+                            {% endif %}
+                            <!-- END WIDGET MESSAGES -->
+                            
+                        </div>
+                        <div class="col-md-3">
+                            
+                            <!-- START WIDGET REGISTRED -->
+                            <div class="widget widget-default widget-item-icon" onclick="location.href='{% url 'admin:auth_user_changelist' %}';">
+                                <div class="widget-item-left">
+                                    <span class="fa fa-user"></span>
+                                </div>
+                                <div class="widget-data">
+                                    <div class="widget-int num-count">{{ countUser }}</div>
+                                    <div class="widget-title">Usuarios Registrados</div>
+                                    <div class="widget-subtitle">en este sitio</div>
+                                </div>
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>                            
+                            </div>                            
+                            <!-- END WIDGET REGISTRED -->
+                            
+                        </div>
+                        <div class="col-md-3">
+                            
+                            <!-- START WIDGET CLOCK -->
+                            <div class="widget widget-info widget-padding-sm">
+                                <div class="widget-big-int plugin-clock">00:00</div>                            
+                                <div class="widget-subtitle plugin-date">Cargando...</div>
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="left" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>                            
+                                <div class="widget-buttons widget-c3">
+                                    <div class="col">
+                                        <a href="#"><span class="fa fa-clock-o"></span></a>
+                                    </div>
+                                    <div class="col">
+                                        <a href="/accounts/profile/expireContract/"><span class="fa fa-bell"></span></a><span class=" pull-top label label-danger">{{ allOldContract }}</span>
+                                    </div>
+                                    <div class="col">
+                                        <a href="#"><span class="fa fa-calendar"></span></a>
+                                    </div>
+                                </div>                            
+                            </div>                        
+                            <!-- END WIDGET CLOCK -->
+                            
+                        </div>
+                    </div>
+                    <!-- END WIDGETS -->                    
+                </div>
+                <!-- PAGE CONTENT WRAPPER -->  
+                <!-- START TYPOGRAPHY -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">  
+                                    
+                                    <h3>Tareas Programadas de la aplicación</h3>
+                                    <p>La aplicación consta de dos tareas programadas para procesar automáticamente todos los contratos de la Universidad de Camagüey.</p>
+                                    <p>&nbsp;</p>
+                                    <h4>Tarea que se ejecuta mensual</h4>
+                                    <p>Esta tarea se ejecuta los días primero de cada mes con el fin de predecir o notificar cuales son los contratos por cuenta propia o por empresas que se vence un mes antes. La misma envía un correo electrónico al administrador del sistema notificándole de dichos contratos.</p>                                
+                                    <p>&nbsp;</p>
+                                    <h4>Tarea que se ejecuta diario</h4>
+                                    <p>Esta tarea se ejecuta todos los días y automáticamente pasa a vencido todo los contratos de empresa o por cuenta propia donde la fecha de caducidad del contrato sea menor que la fecha actual, cuya fecha actual es tomada del servidor donde se aloja la aplicación.</p>                                
+                                    <p>&nbsp;</p>
+                                    <h4>Recomendaciones</h4>
+                                    <p>Si el contrato tiene más de un fichero, comprima los mismo y luego adiciónelo al contrato.</p>
+                                    En el apartado de Administración a la hora de buscar contrato por fecha, busque con este formato Ej. 2019-10-01
+                            </div>
+                        </div>
+                    </div> 
+                </div> 
+                <!-- END TYPOGRAPHY -->                    
+            </div>            
+            <!-- END PAGE CONTENT -->
+        </div>
+        <!-- END PAGE CONTAINER -->
+
+        <!-- MESSAGE BOX-->
+        <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
+            <div class="mb-container">
+                <div class="mb-middle">
+                    <div class="mb-title"><span class="fa fa-sign-out"></span> Salir de la <strong>Aplicación</strong> ?</div>
+                    <div class="mb-content">
+                        <p><strong>{{ user.first_name }} {{ user.last_name }}</strong></p>
+                        <p>Esta seguro que desea salir de la aplicación ?</p>                    
+                        <p>Presione No para seguir trabajando. Presione Si para salir.</p>
+                    </div>
+                    <div class="mb-footer">
+                        <div class="pull-right">
+                            <a href="/logout/" class="btn btn-success btn-lg">Si</a>
+                            <button class="btn btn-default btn-lg mb-control-close">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END MESSAGE BOX-->
+
+        <!-- START PRELOADS -->
+        <audio id="audio-alert" src="{% static 'audio/alert.mp3' %}" preload="auto"></audio>
+        <audio id="audio-fail" src="{% static 'audio/fail.mp3' %}" preload="auto"></audio>
+        <!-- END PRELOADS -->               
+
+    <!-- START SCRIPTS -->
+    {% block script %}
+        <!-- START PLUGINS -->
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-ui.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap.min.js' %}"></script>       
+        <!-- END PLUGINS -->
+
+        <!-- THIS PAGE PLUGINS -->
+        <script type="text/javascript" src="{% static 'js/plugins/icheck/icheck.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/scrolltotop/scrolltopcontrol.js' %}"></script>
+        
+        <script type="text/javascript" src="{% static 'js/plugins/morris/raphael-min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/morris/morris.min.js' %}"></script>       
+        <script type="text/javascript" src="{% static 'js/plugins/rickshaw/d3.v3.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/rickshaw/rickshaw.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>                
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap-datepicker.js' %}"></script>                
+        <script type="text/javascript" src="{% static 'js/plugins/owl/owl.carousel.min.js' %}"></script>                 
+        
+        <script type="text/javascript" src="{% static 'js/plugins/moment.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/daterangepicker/daterangepicker.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/noty/jquery.noty.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/noty/layouts/topRight.js' %}"></script>            
+            
+        <script type="text/javascript" src="{% static 'js/plugins/noty/themes/default.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/push-notification/push.js' %}"></script>
+        <!-- END PAGE PLUGINS -->       
+
+        <!-- START TEMPLATE -->
+        <!-- <script type="text/javascript" src="{% static 'js/settings.js' %}"></script> -->
+        <script type="text/javascript" src="{% static 'js/plugins.js' %}"></script>        
+        <script type="text/javascript" src="{% static 'js/actions.js' %}"></script>        
+        <!-- END TEMPLATE -->
+        {% if allOldContract %}
+        <script>
+            Push.create("Contratos que se vence este mes", {
+                body: "En este mes hay contratos a vencer, examine el apartado de contratos vencidos",
+                icon: '{% static 'img/push-notification/push-notification.png' %}',
+                /*timeout: 4000,*/
+                onClick: function () {
+                    window.focus();
+                    this.close();
+                }
+            });                
+        </script>
+        {% endif %}       
+    {% endblock %}
+    <!-- END SCRIPTS -->         
+    </body>
+</html>
