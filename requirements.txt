@@ -20,7 +20,7 @@ gunicorn==19.9.0
 idna==2.7
 jsonschema==2.6.0
 ldap3==2.5
-paramiko==2.6.0
+paramiko==2.10.1
 psycopg2-binary==2.8.3
 pyasn1==0.4.4
 pycparser==2.19
